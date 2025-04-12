@@ -1,0 +1,128 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    min-width: 1366px;
+    overflow-x: hidden;
+  }
+  
+  header.header {
+    background-color: #111;
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.8rem;
+    color: #0ff;
+  }
+  
+  nav.menu {
+    background-color: #222;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  nav.menu ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  nav.menu button {
+    background-color: #333;
+    color: #0ff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+  }
+  
+  nav.menu button:hover {
+    background-color: #444;
+  }
+  
+  main.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    min-height: 500px;
+    flex-direction: column;
+  }
+  
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 900px;
+  }
+  
+  .screen:not(.hidden) {
+    display: block;
+  }
+  
+  #gameCanvas {
+    background: radial-gradient(ellipse at center, #111 0%, #000 100%);
+    border: 2px solid #0ff;
+    display: block;
+    margin: 1rem auto;
+    box-shadow: 0 0 20px #0ff;
+  }
+  
+  #gameHeader {
+    display: flex;
+    justify-content: space-around;
+    color: #0ff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  footer.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #111;
+    color: #0ff;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  input, select, button {
+    font-size: 1rem;
+    margin: 0.3rem 0;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  button {
+    background-color: #005577;
+    color: white;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #007799;
+  }
+  
+  /* Default color values */
+  #goodColor {
+    background-color: #00f;
+    color-scheme: dark;
+  }
+  
+  #badColor {
+    background-color: #f00;
+    color-scheme: dark;
+  }
+  
+  #goodColor[value="#000000"],
+  #badColor[value="#000000"] {
+    background-color: #fff !important;
+  }
+  

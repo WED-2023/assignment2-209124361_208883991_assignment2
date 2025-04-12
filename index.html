@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal.hidden {
+      display: none;
+    }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      position: relative;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .modal-content .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+      text-align: center;
+      flex-direction: column;
+    }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #004080;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    form label {
+      display: block;
+      text-align: left;
+      margin: 0.5rem 0 0.2rem;
+    }
+    form input, form select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">🎮 Game Portal</div>
+  </header>
+
+  <nav class="menu">
+    <ul>
+      <li><button onclick="navigateTo('welcome')">Welcome</button></li>
+      <li><button onclick="navigateTo('register')">Register</button></li>
+      <li><button onclick="navigateTo('login')">Login</button></li>
+      <li><button onclick="showModal()">About</button></li>
+    </ul>
+  </nav>
+
+  <main class="content">
+    <div id="welcome" class="screen">
+      <div>
+        <h1>Welcome to the halaliot Game Portal</h1>
+        <p>Presenters:<br>
+          Adar Gruenzweig 208883991 <a href="https://wed-2023.github.io/208883991/" target="_blank">Homepage</a><br>
+          Lior Hen 209124361 <a href="https://wed-2023.github.io/209124361/" target="_blank">Homepage</a></p>
+        <button onclick="navigateTo('register')">Register</button>
+        <button onclick="navigateTo('login')">Login</button>
+      </div>
+    </div>
+
+    <div id="register" class="screen hidden">
+      <h2>Register</h2>
+      <form id="registerForm">
+        <label for="regUsername">Username:</label>
+        <input type="text" id="regUsername" required>
+
+        <label for="regPassword">Password:</label>
+        <input type="password" id="regPassword" required>
+
+        <label for="regPassword2">Verify Password:</label>
+        <input type="password" id="regPassword2" required>
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+
+        <label>Date of Birth:</label>
+        <select id="dobYear"></select>
+        <select id="dobMonth"></select>
+        <select id="dobDay"></select>
+
+        <button type="submit">Submit</button>
+      </form>
+      <div id="registerMsg"></div>
+    </div>
+
+    <div id="login" class="screen hidden">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <label for="loginUsername">Username:</label>
+        <input type="text" id="loginUsername" required>
+
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" required>
+
+        <button type="submit">Login</button>
+      </form>
+      <div id="loginMsg"></div>
+    </div>
+
+    <div id="config" class="screen hidden">
+      <h2>Game Configuration</h2>
+      <label for="shootKey">Choose a shoot key:</label>
+      <input id="shootKey" type="text" maxlength="1" placeholder="a-z or space" />
+      <label for="gameTime">Game time (min):</label>
+      <input id="gameTime" type="number" min="2" max="10" value="2" />
+      <label for="goodColor">Good Ship Color:</label>
+      <input id="goodColor" type="color" value="#0000ff" />
+      
+      <label for="badColor">Bad Ship Color:</label>
+      <input id="badColor" type="color" value="#ff0000" />
+      
+      <button onclick="startGame()">Start Game</button>
+    </div>
+
+    <div id="game" class="screen hidden">
+      <div id="gameHeader">
+        <span id="score">Score: 0</span>
+        <span id="lives">Lives: 3</span>
+        <span id="timer">Time: 02:00</span>
+      </div>
+      <canvas id="gameCanvas" width="900" height="600"></canvas>
+      <button onclick="startNewGame()">New Game</button>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 Game Portal | Contact: info@mygame.com</p>
+  </footer>
+
+  <!-- Modal Dialog -->
+  <dialog id="aboutModal">
+    <form method="dialog" class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3>About This Site</h3>
+      <p>Presenters: Adar Gruenzweig and Lior Hen</p>
+      <p>No template or jQuery plugins were used beyond jQuery itself.</p>
+      <p>Difficulties: DOM manipulation logic, screen transitions, canvas timing control, and score tracking logic.</p>
+      <p><strong>Game Instructions:</strong></p>
+      <ul>
+        <li>Use arrow keys to move your ship in the bottom 40% of the screen.</li>
+        <li>Shoot enemies using the key configured before game start.</li>
+        <li>You get 3 lives; each hit resets you to the start position.</li>
+        <li>Score points based on which row the enemy was in (higher rows = more points).</li>
+        <li>Clear all enemies or score high before time runs out!</li>
+        <li>Bad ships fire one bullet at a time; avoid it!</li>
+        <li>The game speeds up every 5 seconds up to 4 times total.</li>
+        <li>Your best scores (with username and time taken) are saved in a local table.</li>
+        <li>Background music plays during gameplay. Sound effects are triggered on hits and disqualifications.</li>
+      </ul>
+    </form>
+  </dialog>
+
+  <!-- Audio and SFX -->
+  <audio id="bgMusic" src="assets/background.mp3" loop></audio>
+  <audio id="sfxShoot" src="assets/shoot.mp3"></audio>
+  <audio id="sfxHit" src="assets/hit.mp3"></audio>
+  <audio id="sfxLose" src="assets/lose.mp3"></audio>
+
+  <script>
+    const bgMusic = document.getElementById('bgMusic');
+    const sfxShoot = document.getElementById('sfxShoot');
+    const sfxHit = document.getElementById('sfxHit');
+    const sfxLose = document.getElementById('sfxLose');
+
+    function playMusic() {
+      bgMusic.volume = 0.3;
+      bgMusic.play().catch(() => {}); // Avoid autoplay issues
+    }
+
+    function stopMusic() {
+      bgMusic.pause();
+      bgMusic.currentTime = 0;
+    }
+
+    function playShoot() {
+      sfxShoot.currentTime = 0;
+      sfxShoot.play();
+    }
+
+    function playHit() {
+      sfxHit.currentTime = 0;
+      sfxHit.play();
+    }
+
+    function playLose() {
+      sfxLose.currentTime = 0;
+      sfxLose.play();
+    }
+
+    // Attach shooting sound
+    document.addEventListener("keydown", (e) => {
+        if (e.key === shootKey) {
+    playShoot();
+    goodShip.bullets.push({ x: goodShip.x + goodShip.width / 2, y: goodShip.y });
+}
+
+    });
+
+  </script>
+
+
+  <script>
+    const users = [{ username: 'p', password: 'testuser' }];
+
+    function navigateTo(screenId) {
+      $('.screen').addClass('hidden');
+      $('#' + screenId).removeClass('hidden');
+    }
+
+    function showModal() {
+      document.getElementById('aboutModal').showModal();
+    }
+
+    function closeModal() {
+      document.getElementById('aboutModal').close();
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    $(document).mouseup(function (e) {
+      const modal = document.getElementById('aboutModal');
+      const rect = modal.getBoundingClientRect();
+      if (
+        e.clientX < rect.left ||
+        e.clientX > rect.right ||
+        e.clientY < rect.top ||
+        e.clientY > rect.bottom
+      ) closeModal();
+    });
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function isAlpha(str) {
+      return /^[a-zA-Z]+$/.test(str);
+    }
+
+    function isStrongPassword(pwd) {
+      return /[A-Za-z]/.test(pwd) && /\d/.test(pwd) && pwd.length >= 8;
+    }
+
+    $('#registerForm').on('submit', function (e) {
+      e.preventDefault();
+      const username = $('#regUsername').val();
+      const password = $('#regPassword').val();
+      const password2 = $('#regPassword2').val();
+      const firstName = $('#firstName').val();
+      const lastName = $('#lastName').val();
+      const email = $('#email').val();
+
+      let msg = '';
+      if (!username || !password || !password2 || !firstName || !lastName || !email) {
+        msg = 'All fields are required.';
+      } else if (!isAlpha(firstName) || !isAlpha(lastName)) {
+        msg = 'First and last name must contain only letters.';
+      } else if (!isValidEmail(email)) {
+        msg = 'Invalid email format.';
+      } else if (!isStrongPassword(password)) {
+        msg = 'Password must include letters, numbers, and be at least 8 characters.';
+      } else if (password !== password2) {
+        msg = 'Passwords do not match.';
+      } else {
+        users.push({ username, password });
+        msg = 'Registration successful! You can now log in.';
+      }
+      $('#registerMsg').text(msg);
+    });
+
+    $('#loginForm').on('submit', function (e) {
+      e.preventDefault();
+      const username = $('#loginUsername').val();
+      const password = $('#loginPassword').val();
+      const user = users.find(u => u.username === username && u.password === password);
+      if (user) {
+        navigateTo('config');
+      } else {
+        $('#loginMsg').text('Invalid username or password.');
+      }
+    });
+
+    $(function () {
+      for (let y = 2025; y >= 1900; y--) $('#dobYear').append(`<option value="${y}">${y}</option>`);
+      for (let m = 1; m <= 12; m++) $('#dobMonth').append(`<option value="${m}">${m}</option>`);
+      for (let d = 1; d <= 31; d++) $('#dobDay').append(`<option value="${d}">${d}</option>`);
+    });
+    
+  </script>
+  <script src="game.js"></script>
+</body>
+</html>
