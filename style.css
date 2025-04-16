@@ -78,18 +78,22 @@ body {
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    align-items: center;
   }
   
   footer.footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    margin-top: 2rem;
+    padding: 1rem;
     background-color: #111;
     color: #0ff;
     text-align: center;
-    padding: 1rem;
     font-size: 0.9rem;
+    border-radius: 5px;
+    border: 1px solid #0ff;
+  }
+  
+  #welcome .footer {
+    display: block;
   }
   
   input, select, button {
@@ -124,5 +128,151 @@ body {
   #goodColor[value="#000000"],
   #badColor[value="#000000"] {
     background-color: #fff !important;
+  }
+  
+  #pauseButton, #newGameButton {
+    background-color: #005577;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 1rem;
+  }
+  
+  #pauseButton:hover, #newGameButton:hover {
+    background-color: #007799;
+    transform: scale(1.1);
+  }
+  
+  #newGameButton {
+    background-color: #550000;
+  }
+  
+  #newGameButton:hover {
+    background-color: #770000;
+  }
+  
+  #score {
+    transition: transform 0.2s ease;
+  }
+  
+  /* Add styles for the game canvas when paused */
+  #gameCanvas.paused {
+    opacity: 0.7;
+    filter: blur(1px);
+  }
+  
+  /* Add styles for the pause overlay */
+  .pause-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: #0ff;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+  }
+  
+  /* Configuration Screen Styles */
+  .config-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    border: 2px solid #0ff;
+    box-shadow: 0 0 20px #0ff;
+  }
+  
+  .config-section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    border: 1px solid #0ff;
+  }
+  
+  .config-section h3 {
+    color: #0ff;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+  
+  .config-item {
+    margin-bottom: 1rem;
+  }
+  
+  .config-item label {
+    display: block;
+    color: #0ff;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  .config-item input {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #0ff;
+    border-radius: 5px;
+    color: #0ff;
+    font-size: 1rem;
+  }
+  
+  .config-item input[type="color"] {
+    height: 40px;
+    padding: 2px;
+    cursor: pointer;
+  }
+  
+  .config-hint {
+    color: #0ff;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    opacity: 0.8;
+  }
+  
+  .start-game-btn {
+    display: block;
+    width: 200px;
+    margin: 2rem auto 0;
+    padding: 1rem;
+    background: #005577;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .start-game-btn:hover {
+    background: #007799;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #0ff;
+  }
+  
+  /* Improve color input appearance */
+  input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 100%;
+    height: 40px;
+  }
+  
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  
+  input[type="color"]::-webkit-color-swatch {
+    border: 1px solid #0ff;
+    border-radius: 5px;
   }
   

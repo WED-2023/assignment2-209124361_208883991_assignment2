@@ -93,6 +93,9 @@
         <button onclick="navigateTo('register')">Register</button>
         <button onclick="navigateTo('login')">Login</button>
       </div>
+      <footer class="footer">
+        <p>&copy; 2025 Game Portal | Contact: info@mygame.com</p>
+      </footer>
     </div>
 
     <div id="register" class="screen hidden">
@@ -142,17 +145,41 @@
 
     <div id="config" class="screen hidden">
       <h2>Game Configuration</h2>
-      <label for="shootKey">Choose a shoot key:</label>
-      <input id="shootKey" type="text" maxlength="1" placeholder="a-z or space" />
-      <label for="gameTime">Game time (min):</label>
-      <input id="gameTime" type="number" min="2" max="10" value="2" />
-      <label for="goodColor">Good Ship Color:</label>
-      <input id="goodColor" type="color" value="#0000ff" />
-      
-      <label for="badColor">Bad Ship Color:</label>
-      <input id="badColor" type="color" value="#ff0000" />
-      
-      <button onclick="startGame()">Start Game</button>
+      <div class="config-container">
+        <div class="config-section">
+          <h3>Controls</h3>
+          <div class="config-item">
+            <label for="shootKey">Shoot Key:</label>
+            <input id="shootKey" type="text" maxlength="1" placeholder="Press a key" 
+                   onkeydown="return validateShootKey(event)" 
+                   onkeyup="this.value = this.value.toLowerCase()" />
+            <p class="config-hint">Choose a letter (a-z) or space</p>
+          </div>
+        </div>
+
+        <div class="config-section">
+          <h3>Game Settings</h3>
+          <div class="config-item">
+            <label for="gameTime">Game Duration (minutes):</label>
+            <input id="gameTime" type="number" min="2" max="10" value="2" />
+            <p class="config-hint">Minimum 2 minutes</p>
+          </div>
+        </div>
+
+        <div class="config-section">
+          <h3>Appearance</h3>
+          <div class="config-item">
+            <label for="goodColor">Your Ship Color:</label>
+            <input id="goodColor" type="color" value="#0000ff" />
+          </div>
+          <div class="config-item">
+            <label for="badColor">Enemy Ship Color:</label>
+            <input id="badColor" type="color" value="#ff0000" />
+          </div>
+        </div>
+
+        <button class="start-game-btn" onclick="startGame()">Start Game</button>
+      </div>
     </div>
 
     <div id="game" class="screen hidden">
@@ -160,44 +187,58 @@
         <span id="score">Score: 0</span>
         <span id="lives">Lives: 3</span>
         <span id="timer">Time: 02:00</span>
+        <button id="pauseButton" onclick="togglePause()">Pause</button>
+        <button id="newGameButton" onclick="startNewGame()">New Game</button>
       </div>
       <canvas id="gameCanvas" width="900" height="600"></canvas>
-      <button onclick="startNewGame()">New Game</button>
     </div>
   </main>
 
-  <footer class="footer">
-    <p>&copy; 2025 Game Portal | Contact: info@mygame.com</p>
-  </footer>
-
-  <!-- Modal Dialog -->
   <dialog id="aboutModal">
     <form method="dialog" class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h3>About This Site</h3>
-      <p>Presenters: Adar Gruenzweig and Lior Hen</p>
-      <p>No template or jQuery plugins were used beyond jQuery itself.</p>
-      <p>Difficulties: DOM manipulation logic, screen transitions, canvas timing control, and score tracking logic.</p>
+      <p><strong>Presenters:</strong> Adar Gruenzweig and Lior Hen</p>
+      <p><strong>Technologies Used:</strong> Vanilla JavaScript, HTML5, CSS3, and jQuery. No external templates or plugins were used beyond jQuery.</p>
+      <p><strong>Difficulties Encountered:</strong> 
+        Managing animation and DOM transitions simultaneously, ensuring accurate timing across logic, music, movement, and bullets. Dealing with input customization and making sure the game runs smoothly across screen resolutions. Fine-tuning visual feedback, bullet hit detection, and multi-directional ship control was also challenging.
+      </p>
+      <p><strong>Additional Features:</strong> Implemented object diagonal movement for both player and enemy bullets to improve game dynamics and realism.</p>
+  
       <p><strong>Game Instructions:</strong></p>
       <ul>
-        <li>Use arrow keys to move your ship in the bottom 40% of the screen.</li>
-        <li>Shoot enemies using the key configured before game start.</li>
-        <li>You get 3 lives; each hit resets you to the start position.</li>
-        <li>Score points based on which row the enemy was in (higher rows = more points).</li>
-        <li>Clear all enemies or score high before time runs out!</li>
-        <li>Bad ships fire one bullet at a time; avoid it!</li>
-        <li>The game speeds up every 5 seconds up to 4 times total.</li>
-        <li>Your best scores (with username and time taken) are saved in a local table.</li>
-        <li>Background music plays during gameplay. Sound effects are triggered on hits and disqualifications.</li>
+        <li>Use <strong>arrow keys</strong> to move your ship (including diagonally) within the bottom 40% of the screen.</li>
+        <li>Shoot enemies using your configured key (a-z or spacebar).</li>
+        <li>You have <strong>3 lives</strong>. If hit, you lose one and restart at your starting position.</li>
+        <li><strong>Score points</strong> based on enemy row:
+          <ul>
+            <li>Bottom row – 5 points</li>
+            <li>Third row – 10 points</li>
+            <li>Second row – 15 points</li>
+            <li>Top row – 20 points</li>
+          </ul>
+        </li>
+        <li>Enemies move together in rows, bouncing left/right and shifting vertically at random.</li>
+        <li>Each enemy can shoot bullets that move diagonally down. Only one shot is allowed per cooldown.</li>
+        <li><strong>Your ship’s bullets</strong> inherit horizontal momentum and move diagonally up.</li>
+        <li>Hold the shoot key for auto-fire with cooldown.</li>
+        <li>The game gets faster every 5 seconds up to 4 times.</li>
+        <li>Press <strong>P</strong> to pause/resume the game at any time.</li>
+        <li><strong>Sound effects:</strong> Music, shooting, hits, and defeat.</li>
+        <li>A scoreboard appears at the end showing the top 5 scores by username and time.</li>
+        <li>You can start a new game anytime by pressing the <strong>New Game</strong> button.</li>
       </ul>
     </form>
   </dialog>
+  
+  
 
   <!-- Audio and SFX -->
   <audio id="bgMusic" src="assets/background.mp3" loop></audio>
   <audio id="sfxShoot" src="assets/shoot.mp3"></audio>
   <audio id="sfxHit" src="assets/hit.mp3"></audio>
   <audio id="sfxLose" src="assets/lose.mp3"></audio>
+  <audio id="sfxEnemyHit" src="assets/enemy_hit.mp3"></audio>
 
   <script>
     const bgMusic = document.getElementById('bgMusic');
@@ -229,15 +270,6 @@
       sfxLose.currentTime = 0;
       sfxLose.play();
     }
-
-    // Attach shooting sound
-    document.addEventListener("keydown", (e) => {
-        if (e.key === shootKey) {
-    playShoot();
-    goodShip.bullets.push({ x: goodShip.x + goodShip.width / 2, y: goodShip.y });
-}
-
-    });
 
   </script>
 
@@ -332,5 +364,23 @@
     
   </script>
   <script src="game.js"></script>
+  <script>
+    function validateShootKey(event) {
+      // Allow backspace, delete, tab, escape, enter
+      if (event.keyCode === 46 || event.keyCode === 8 || event.keyCode === 9 || 
+          event.keyCode === 27 || event.keyCode === 13 || event.keyCode === 32) {
+        return true;
+      }
+      // Allow only letters (a-z)
+      if (event.keyCode >= 65 && event.keyCode <= 90) {
+        return true;
+      }
+      // Allow space
+      if (event.keyCode === 32) {
+        return true;
+      }
+      return false;
+    }
+  </script>
 </body>
 </html>
