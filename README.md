@@ -28,8 +28,8 @@ Players control a spaceship at the bottom of the screen, capable of moving in al
 ## 🌐 Live Site
 
 You can play the game here:  
-🔗 [https://wed-2023.github.io/209124361/](https://wed-2023.github.io/209124361/)
-
+[🔗 [https://wed-2023.github.io/209124361/](https://wed-2023.github.io/209124361/)
+](https://wed-2023.github.io/assignment2-209124361_208883991_assignment2/)
 ## 📁 Project Structure
 
 - `index.html` – Main HTML structure for all screens
