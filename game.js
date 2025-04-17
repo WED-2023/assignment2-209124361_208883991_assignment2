@@ -43,6 +43,7 @@ let lastShootTime = 0;
 const SHOOT_COOLDOWN = 300; 
 let shootInterval = null;
 let isShooting = false;
+let speedIncreaseTimer;
 
 function startGame() {
   shootKey = document.getElementById("shootKey").value || " ";
@@ -93,6 +94,10 @@ function startGame() {
       endGame("time");
     }
   }, 1000);
+
+  // Add speed increase timer
+  clearInterval(speedIncreaseTimer);
+  speedIncreaseTimer = setInterval(increaseSpeed, 5000);
 }
 
 function drawGoodShip(ship) {
@@ -311,7 +316,6 @@ function updateGame() {
   if (badShips.length === 0) endGame("cleared");
   document.getElementById("timer").textContent = `Time: ${formatTime(remainingTime)}`;
 
-  // Update the score display with animation
   const scoreElement = document.getElementById("score");
   scoreElement.style.transform = "scale(1.2)";
   setTimeout(() => {
@@ -490,6 +494,10 @@ $('#loginForm').on('submit', function (e) {
   const passInput = $('#loginPassword').val();
   const user = users.find(u => u.username === loginInput && u.password === passInput);
   if (user) {
+    // Clear score history if it's a different player
+    if (username !== loginInput) {
+      scoreHistory = [];
+    }
     username = loginInput;
     navigateTo('config');
   } else {
@@ -542,5 +550,28 @@ function playEnemyHit() {
   if (sfxEnemyHit) {
     sfxEnemyHit.currentTime = 0;
     sfxEnemyHit.play().catch(() => {}); // Avoid autoplay issues
+  }
+}
+
+function increaseSpeed() {
+  if (speedupCount < MAX_SPEED_UPS) {
+    speedupCount++;
+    speedFactor += 0.5; // Increase speed by 50% each time
+    // Add visual feedback for speed increase
+    const speedFeedback = document.createElement('div');
+    speedFeedback.style.position = 'absolute';
+    speedFeedback.style.top = '50%';
+    speedFeedback.style.left = '50%';
+    speedFeedback.style.transform = 'translate(-50%, -50%)';
+    speedFeedback.style.color = '#ff0';
+    speedFeedback.style.fontSize = '24px';
+    speedFeedback.style.fontWeight = 'bold';
+    speedFeedback.style.textShadow = '0 0 10px #ff0';
+    speedFeedback.style.zIndex = '1000';
+    speedFeedback.textContent = `Speed Level ${speedupCount}!`;
+    document.getElementById('game').appendChild(speedFeedback);
+    setTimeout(() => speedFeedback.remove(), 1000);
+  } else {
+    clearInterval(speedIncreaseTimer);
   }
 }
